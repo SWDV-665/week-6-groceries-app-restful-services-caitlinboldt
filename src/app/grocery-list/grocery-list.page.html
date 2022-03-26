@@ -13,10 +13,17 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addGroceryItem()">
+      <ion-icon name="add">
+      </ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-list>
     <ion-item-sliding *ngFor="let grocery of groceries; let i = index">
       <ion-item>
-        <h2>{{grocery.name}}</h2>
+        <h2>{{grocery.name}} <span>Cost: ${{grocery.cost}}</span> <span>Quantity: {{grocery.quantity}}</span></h2>
       </ion-item>
       <ion-item-options>
         <button ion-button (click)="removeGroceryItem(i)" class="checkmark-done" color="primary">
