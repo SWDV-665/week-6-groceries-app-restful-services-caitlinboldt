@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
-
-export interface GroceryProps {
-  name: string;
-  cost: number;
-  quantity: number;
-}
+import { GroceriesService } from '../../services/groceries-service/groceries-service.service';
+import { InputDialogService } from '../../services/input-dialog-service/input-dialog-service.service';
 
 @Component({
   selector: 'app-grocery-list',
@@ -16,63 +11,32 @@ export interface GroceryProps {
 
 export class GroceryListPage {
 
-  groceries: GroceryProps[] = [];
+  constructor(
+    public toastCtrl: ToastController,
+    public groceryDataService: GroceriesService,
+    public inputDialogService: InputDialogService
+    ) {
+  }
 
-  constructor(public toastCtrl: ToastController, public alertController: AlertController) {
+  loadGroceryItems() {
+    return this.groceryDataService.getGroceries();
   }
 
   async addGroceryItem() {
-    const alert = await this.alertController.create({
-      header: 'Add a Grocery Item',
-      inputs: [
-        {
-          name: 'name',
-          type: 'text',
-          placeholder: 'Name of grocery item'
-        },
-        {
-          name: 'cost',
-          type: 'number',
-          min: 0,
-          placeholder: 'Cost of grocery item'
-        },
-        {
-          name: 'quantity',
-          type: 'number',
-          min: 0,
-          placeholder: 'Quantity'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
-        }, {
-          text: 'Add',
-          handler: (data) => {
-            this.groceries.push(data);
-          }
-        }
-      ]
-    });
-    await alert.present();
+    this.inputDialogService.addGroceryItem();
   }
 
-  async removeGroceryItem(index) {
+  async editGroceryItem(index, groceryItem) {
+    this.inputDialogService.editGroceryItem(index, groceryItem);
+  }
+
+  async removeGroceryItem(index, name) {
     const toast = await this.toastCtrl.create({
-      message: `Removing ${this.groceries[index].name} from the grocery list.`,
+      message: `Removing ${name} from the grocery list.`,
       duration: 3000
     });
     toast.present();
 
-    if (this.groceries.length > 1) {
-      this.groceries.splice(index, 1);
-    } else {
-      this.groceries = [];
-    }
+    this.groceryDataService.removeGroceryItem(index);
   }
 }

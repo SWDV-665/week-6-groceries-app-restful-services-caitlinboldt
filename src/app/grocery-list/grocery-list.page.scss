@@ -8,8 +8,14 @@ span {
   padding-left: 10px;
 }
 
+.edit-item {
+  background-color: cornflowerblue;
+  font-size: 26px;
+  width: 100px;
+}
+
 .checkmark-done {
-  background-color: green;
+  background-color: rgb(24, 184, 24);
   width: 100px;
 
   .checkmark {
