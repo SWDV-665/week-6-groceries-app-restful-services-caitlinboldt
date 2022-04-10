@@ -10,12 +10,21 @@ span {
 
 .edit-item {
   background-color: cornflowerblue;
+  color: white;
+  font-size: 26px;
+  width: 100px;
+}
+
+.share-item {
+  background-color: lightgrey;
+  color: white;
   font-size: 26px;
   width: 100px;
 }
 
 .checkmark-done {
   background-color: rgb(24, 184, 24);
+  color: white;
   width: 100px;
 
   .checkmark {

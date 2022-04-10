@@ -30,6 +30,9 @@
         <button ion-button (click)="editGroceryItem(i, grocery)" class="edit-item" color="secondary">
           <ion-icon name="create"></ion-icon>
         </button>
+        <button ion-button (click)="shareGroceryItem(grocery.name, grocery.quantity)" class="share-item" color="light">
+          <ion-icon name="share"></ion-icon>
+        </button>
         <button ion-button (click)="removeGroceryItem(i, grocery.name)" class="checkmark-done" color="primary">
           <ion-icon class="checkmark" name="checkmark"></ion-icon>
         </button>
