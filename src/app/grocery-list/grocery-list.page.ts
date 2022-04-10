@@ -49,8 +49,6 @@ export class GroceryListPage {
     });
     toast.present();
 
-    console.log('This is working', name, quantity);
-
     const message = `Grocery Item - Name: ${name} - Quantity: ${quantity}`;
     const subject = 'Shared via Groceries app';
     this.socialSharing.share(message, subject).then(() => {
