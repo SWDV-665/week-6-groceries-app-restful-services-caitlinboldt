@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-
-export interface GroceryProps {
-  name: string;
-  cost: number;
-  quantity: number;
-}
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,27 +10,57 @@ export interface GroceryProps {
 
 export class GroceriesService {
 
-  groceries: GroceryProps[] = [];
+  groceries: any = [];
 
-  constructor() { }
+  dataChanged$: Observable<boolean>;
+  baseURL = 'http://localhost:8080';
 
-  getGroceries() {
-    return this.groceries;
+  public dataChangeSubject: Subject<boolean>;
+
+  constructor(public http: HttpClient) {
+    this.dataChangeSubject = new Subject<boolean>();
+    this.dataChanged$ = this.dataChangeSubject.asObservable();
   }
 
-  addGroceryItem(data) {
-    this.groceries.push(data);
+  getGroceries(): Observable<any> {
+    return this.http.get(`${this.baseURL}/api/groceries`).pipe(map(this.extractData), catchError(this.handleError));
   }
 
-  editGroceryItem(index, data) {
-    this.groceries[index] = data;
+  addGroceryItem(groceryItem) {
+    this.http.post(`${this.baseURL}/api/groceries`, groceryItem).subscribe(res => {
+      this.groceries = res;
+      this.dataChangeSubject.next(true);
+    });
   }
 
-  removeGroceryItem(index) {
-    if (this.groceries.length > 1) {
-      this.groceries.splice(index, 1);
+  editGroceryItem(id, groceryItem) {
+    this.http.put(`${this.baseURL}/api/groceries/${id}`, groceryItem).subscribe(res => {
+      this.groceries = res;
+      this.dataChangeSubject.next(true);
+    });
+  }
+
+  removeGroceryItem(id) {
+    this.http.delete(`${this.baseURL}/api/groceries/${id}`).subscribe(res => {
+      this.groceries = res;
+      this.dataChangeSubject.next(true);
+    });
+  }
+
+  private extractData(res: Response) {
+    const body = res;
+    return body || {};
+  }
+
+  private handleError(error: Response | any) {
+    let errorMessage: string;
+    if (error instanceof Response) {
+      const err = error || '';
+      errorMessage = `${error.status} - ${error.statusText || ''} ${err}`;
     } else {
-      this.groceries = [];
+      errorMessage = error.message ? error.message : error.toString();
     }
+    console.error(errorMessage);
+    return errorMessage;
   }
 }

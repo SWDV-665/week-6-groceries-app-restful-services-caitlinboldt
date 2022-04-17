@@ -12,34 +12,47 @@ import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 
 export class GroceryListPage {
 
+  groceries = [];
+  errorMessage: string;
+
   constructor(
     public toastCtrl: ToastController,
     public groceryDataService: GroceriesService,
     public inputDialogService: InputDialogService,
     private socialSharing: SocialSharing
-    ) {
+  ) {
+    this.loadGroceryItems();
+    groceryDataService.dataChanged$.subscribe((dataChanged: boolean) => {
+      this.loadGroceryItems();
+    });
   }
 
   loadGroceryItems() {
-    return this.groceryDataService.getGroceries();
+    this.groceryDataService.getGroceries()
+    .subscribe(
+      groceries => this.groceries = groceries,
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      error => this.errorMessage = <any>error
+    );
   }
 
   async addGroceryItem() {
     this.inputDialogService.addGroceryItem();
   }
 
-  async editGroceryItem(index, groceryItem) {
-    this.inputDialogService.editGroceryItem(index, groceryItem);
+  async editGroceryItem(groceryItem) {
+    this.inputDialogService.editGroceryItem(groceryItem);
   }
 
-  async removeGroceryItem(index, name) {
+  async removeGroceryItem(groceryItem) {
     const toast = await this.toastCtrl.create({
-      message: `Removing ${name} from the grocery list.`,
+      message: `Removing ${groceryItem.name} from the grocery list.`,
       duration: 3000
     });
     toast.present();
 
-    this.groceryDataService.removeGroceryItem(index);
+    // eslint-disable-next-line no-underscore-dangle
+    this.groceryDataService.removeGroceryItem(groceryItem._id);
   }
 
   async shareGroceryItem(name, quantity) {

@@ -50,7 +50,7 @@ export class InputDialogService {
     await alert.present();
   }
 
-  async editGroceryItem(index, groceryItem) {
+  async editGroceryItem(groceryItem) {
     const alert = await this.alertController.create({
       header: `Edit ${groceryItem.name}`,
       inputs: [
@@ -86,7 +86,8 @@ export class InputDialogService {
         }, {
           text: 'Update',
           handler: (data) => {
-            this.groceryDataService.editGroceryItem(index, data);
+            // eslint-disable-next-line no-underscore-dangle
+            this.groceryDataService.editGroceryItem(groceryItem._id, data);
           }
         }
       ]

@@ -20,20 +20,20 @@
     </ion-fab-button>
   </ion-fab>
 
-  <h3 class="ion-text-center" *ngIf="loadGroceryItems().length === 0">No groceries items in the list</h3>
+  <h3 class="ion-text-center" *ngIf="groceries.length === 0">No groceries items in the list</h3>
   <ion-list>
-    <ion-item-sliding *ngFor="let grocery of loadGroceryItems(); let i = index">
+    <ion-item-sliding *ngFor="let grocery of groceries; let i = index">
       <ion-item>
         <h2>{{grocery.name}} <span>Cost: ${{grocery.cost}}</span> <span>Quantity: {{grocery.quantity}}</span></h2>
       </ion-item>
       <ion-item-options>
-        <button ion-button (click)="editGroceryItem(i, grocery)" class="edit-item" color="secondary">
+        <button ion-button (click)="editGroceryItem(grocery)" class="edit-item" color="secondary">
           <ion-icon name="create"></ion-icon>
         </button>
         <button ion-button (click)="shareGroceryItem(grocery.name, grocery.quantity)" class="share-item" color="light">
           <ion-icon name="share"></ion-icon>
         </button>
-        <button ion-button (click)="removeGroceryItem(i, grocery.name)" class="checkmark-done" color="primary">
+        <button ion-button (click)="removeGroceryItem(grocery)" class="checkmark-done" color="primary">
           <ion-icon class="checkmark" name="checkmark"></ion-icon>
         </button>
       </ion-item-options>
