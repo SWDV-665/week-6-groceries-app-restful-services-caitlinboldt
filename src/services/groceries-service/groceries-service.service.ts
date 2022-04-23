@@ -13,7 +13,7 @@ export class GroceriesService {
   groceries: any = [];
 
   dataChanged$: Observable<boolean>;
-  baseURL = 'http://localhost:8080';
+  baseURL = process.env.API_URL;
 
   public dataChangeSubject: Subject<boolean>;
 
