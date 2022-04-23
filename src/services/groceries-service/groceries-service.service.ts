@@ -13,7 +13,7 @@ export class GroceriesService {
   groceries: any = [];
 
   dataChanged$: Observable<boolean>;
-  baseURL = process.env.API_URL;
+  baseURL = 'https://server-groceries.herokuapp.com';
 
   public dataChangeSubject: Subject<boolean>;
 
